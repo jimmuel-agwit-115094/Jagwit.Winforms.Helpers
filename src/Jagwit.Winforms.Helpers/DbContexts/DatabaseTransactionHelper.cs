@@ -7,8 +7,17 @@ using System.Transactions;
 
 namespace Jagwit.Winforms.Helpers.DbContexts
 {
+    /// <summary>
+    /// Extension methods for <see cref="DbContext"/> to simplify transactional operations.
+    /// </summary>
     public static class DatabaseTransactionHelper
     {
+        /// <summary>
+        /// Executes <paramref name="transactionalAction"/> inside a <see cref="TransactionScope"/>.
+        /// Handles common exceptions and surfaces them to the user via <see cref="MessageHandler"/>.
+        /// </summary>
+        /// <param name="context">The <see cref="DbContext"/> instance (used as extension target).</param>
+        /// <param name="transactionalAction">The async work to run inside the transaction.</param>
         public static async Task ExecuteInTransactionAsync(this DbContext context, Func<Task> transactionalAction)
         {
             using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
