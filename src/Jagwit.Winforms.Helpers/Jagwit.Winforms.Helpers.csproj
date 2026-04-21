@@ -15,8 +15,8 @@
     <Description>Reusable WinForms helper utilities including EF Core transaction helpers and UI message handlers.</Description>
     <PackageTags>winforms;helpers;efcore;transactions;utilities</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/jagwit/Jagwit.Winforms.Helpers</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/jagwit/Jagwit.Winforms.Helpers</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/jimmuel-agwit-115094/Jagwit.Winforms.Helpers</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jimmuel-agwit-115094/Jagwit.Winforms.Helpers</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
     <!-- XML docs → IntelliSense for consumers -->
