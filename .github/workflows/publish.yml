@@ -28,14 +28,14 @@ jobs:
       - name: Restore
         run: dotnet restore
 
-      - name: Build
-        run: dotnet build --configuration Release --no-restore -p:Version=${{ steps.version.outputs.VERSION }}
-
       - name: Pack
-        run: dotnet pack src/Jagwit.Winforms.Helpers/Jagwit.Winforms.Helpers.csproj --configuration Release --no-build -p:Version=${{ steps.version.outputs.VERSION }} --output ./artifacts
+        run: dotnet pack src/Jagwit.Winforms.Helpers/Jagwit.Winforms.Helpers.csproj --configuration Release --no-restore -p:Version=${{ steps.version.outputs.VERSION }} --output ./artifacts
+
+      - name: List artifacts
+        run: ls ./artifacts
 
       - name: Push to NuGet.org
-        run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push "./artifacts/Jagwit.Winforms.Helpers.${{ steps.version.outputs.VERSION }}.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Push symbols to NuGet.org
-        run: dotnet nuget push ./artifacts/*.snupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push "./artifacts/Jagwit.Winforms.Helpers.${{ steps.version.outputs.VERSION }}.snupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
