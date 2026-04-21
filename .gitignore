@@ -1,0 +1,15 @@
+## Visual Studio / .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.nupkg
+*.snupkg
+
+## JetBrains
+.idea/
+
+## OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>Jagwit.Winforms.Helpers</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Jimmuel Agwit</Authors>
+    <Company>Nelnet</Company>
+    <Description>Reusable WinForms helper utilities including EF Core transaction helpers and UI message handlers.</Description>
+    <PackageTags>winforms;helpers;efcore;transactions;utilities</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/jagwit/Jagwit.Winforms.Helpers</RepositoryUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>
