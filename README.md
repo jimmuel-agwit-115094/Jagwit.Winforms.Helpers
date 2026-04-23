@@ -1,6 +1,6 @@
 # Jagwit.Winforms.Helpers
 
-A class library of reusable WinForms helper utilities — EF Core transaction helpers, UI message dialogs, date formatting, null checking, concurrency checking, server clock, and RDLC printing.
+Reusable WinForms utilities for .NET 8 and .NET Framework 4.7.2 — EF Core transactions, message dialogs, date formatting, null checking, concurrency checking, server clock, and RDLC printing.
 
 ---
 
@@ -25,7 +25,21 @@ Install-Package Jagwit.Winforms.Helpers
 | `net8.0-windows` | .NET 8.0 (Windows) |
 | `net472` | .NET Framework 4.7.2 or later |
 
-Windows Forms application required for both targets.
+A Windows Forms application is required for both targets.
+
+---
+
+## Breaking Change — v1.1.3
+
+The `Helpers` folder and namespace were renamed to `Utilities`.
+
+```csharp
+// Before
+using Jagwit.Winforms.Helpers.Helpers;
+
+// After
+using Jagwit.Winforms.Helpers.Utilities;
+```
 
 ---
 
@@ -33,29 +47,29 @@ Windows Forms application required for both targets.
 
 ### DatabaseTransactionHelper
 
-Extension method on `DbContext` that wraps your async operations in a `TransactionScope`. Automatically handles common exceptions and displays user-friendly dialogs.
+Extension method on `DbContext` that wraps async operations in a `TransactionScope`. Handles common exceptions and surfaces them as user-friendly dialogs.
 
-**Usage**
+**Namespace:** `Jagwit.Winforms.Helpers.DbContexts`  
+**Targets:** `net8.0-windows`, `net472`
 
 ```csharp
 using Jagwit.Winforms.Helpers.DbContexts;
 
 await _context.ExecuteInTransactionAsync(async () =>
 {
-    // your EF Core operations here
     _context.Orders.Add(newOrder);
     await _context.SaveChangesAsync();
 });
 ```
 
-**Exception handling built-in**
+**Built-in exception handling**
 
 | Exception | Behavior |
 |---|---|
-| `NullReferenceException` | Shows error dialog — "Null data error" |
-| `DBConcurrencyException` | Shows error dialog — "Dirty data error" |
-| `InvalidOperationException` (known) | Shows warning dialog with the message |
-| `Exception` (any other) | Shows error dialog with full details |
+| `NullReferenceException` | Error dialog — "Null data error" |
+| `DBConcurrencyException` | Error dialog — "Dirty data error" |
+| `InvalidOperationException` (known prefix) | Warning dialog with the message |
+| Any other `Exception` | Error dialog with full details |
 
 Known `InvalidOperationException` prefixes treated as warnings:
 - `INSUFFICIENT STOCK`
@@ -66,57 +80,48 @@ Known `InvalidOperationException` prefixes treated as warnings:
 
 ### MessageHandler
 
-Static wrapper around `MessageBox.Show` for consistent dialog styling across your WinForms app.
+Static wrapper around `MessageBox.Show` for consistent dialog styling.
 
-**Usage**
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net8.0-windows`, `net472`
 
 ```csharp
 using Jagwit.Winforms.Helpers.Utilities;
 
-// Error dialog
 MessageHandler.ShowError("Something went wrong.");
-
-// Warning dialog
 MessageHandler.ShowWarning("Stock is running low.");
-
-// Info dialog
 MessageHandler.ShowInfo("Record saved successfully.");
 
-// Yes/No confirmation
 DialogResult result = MessageHandler.ShowConfirmation("Delete this record?");
-if (result == DialogResult.Yes)
-{
-    // proceed
-}
+if (result == DialogResult.Yes) { }
 ```
 
 ---
 
 ### ClockHelper
 
-Retrieves the current date and time from the database server via a raw ADO.NET connection. Supports an injectable `DateTimeProvider` delegate for unit testing.
+Retrieves the current date and time from the database server via a raw ADO.NET connection. Supports an injectable `DateTimeProvider` for unit testing.
 
-> Available on both `net8.0-windows` and `net472`.
-
-**Usage**
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net8.0-windows`, `net472`
 
 ```csharp
 using Jagwit.Winforms.Helpers.Utilities;
 using System.Data.Common;
 
-// With EF Core (requires Microsoft.EntityFrameworkCore.Relational):
-var connection = (DbConnection)_context.Database.GetDbConnection();
-DateTime serverTime = await ClockHelper.GetServerDateTimeAsync(connection, "SELECT NOW()");
-
 // With a direct ADO.NET connection:
 using var conn = new MySqlConnection(connectionString);
 DateTime serverTime = await ClockHelper.GetServerDateTimeAsync(conn, "SELECT NOW()");
+
+// With EF Core (requires Microsoft.EntityFrameworkCore.Relational):
+var conn = (DbConnection)_context.Database.GetDbConnection();
+DateTime serverTime = await ClockHelper.GetServerDateTimeAsync(conn);
 
 // Override for testing:
 ClockHelper.DateTimeProvider = () => Task.FromResult(new DateTime(2026, 1, 1));
 ```
 
-The `sql` parameter defaults to `SELECT GETDATE()` (SQL Server). Pass `SELECT NOW()` for MySQL or PostgreSQL.
+The `sql` parameter defaults to `SELECT GETDATE()` (SQL Server). Use `SELECT NOW()` for MySQL or PostgreSQL.
 
 ---
 
@@ -124,56 +129,47 @@ The `sql` parameter defaults to `SELECT GETDATE()` (SQL Server). Pass `SELECT NO
 
 Static methods for formatting `DateTime` values into display-ready strings.
 
-> Available on both `net8.0-windows` and `net472`.
-
-**Usage**
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net8.0-windows`, `net472`
 
 ```csharp
 using Jagwit.Winforms.Helpers.Utilities;
 
-// "April 23, 2026"
-string full = DateFormatHelper.FormatDate(DateTime.Now);
-
-// "April 23, 2026 | 02:30 PM"
-string withTime = DateFormatHelper.FormatDateWithTime(DateTime.Now);
-
-// "Apr. 23, 2026"
-string shortDate = DateFormatHelper.FormatShortDate(DateTime.Now);
+DateFormatHelper.FormatDate(DateTime.Now);           // "April 23, 2026"
+DateFormatHelper.FormatDateWithTime(DateTime.Now);   // "April 23, 2026 | 02:30 PM"
+DateFormatHelper.FormatShortDate(DateTime.Now);      // "Apr. 23, 2026"
 
 // Custom format
-string custom = DateFormatHelper.FormatDate(DateTime.Now, "yyyy-MM-dd");
+DateFormatHelper.FormatDate(DateTime.Now, "yyyy-MM-dd");
 ```
 
 ---
 
 ### NullCheckerHelper
 
-Throws a `NullReferenceException` with a descriptive message when a database entity is null.
+Throws a `NullReferenceException` with a descriptive message when a database entity is `null`.
 
-> Available on both `net8.0-windows` and `net472`.
-
-**Usage**
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net8.0-windows`, `net472`
 
 ```csharp
 using Jagwit.Winforms.Helpers.Utilities;
 
 var product = await _context.Products.FindAsync(id);
 NullCheckerHelper.NullCheck(product);
-// continues safely — product is not null here
+// safe to use product below
 ```
 
 ---
 
 ### PrintingHelper
 
-Configures a `ReportViewer` control with an RDLC report, data source, and optional parameters, then switches to print-layout mode and refreshes.
+Configures a `ReportViewer` control with an RDLC file, data source, and optional parameters, then switches to print-layout mode and refreshes.
 
-> **Available on `net472` only.** No official ReportViewer NuGet package exists for `net8.0-windows`.  
-> Requires `Microsoft.ReportingServices.ReportViewerControl.Winforms` installed in your project.
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net472` only — no official ReportViewer NuGet package exists for `net8.0-windows`
 
 RDLC files are resolved from `<Application.StartupPath>\Printing\rdlc\<reportName>.rdlc`.
-
-**Usage**
 
 ```csharp
 using Jagwit.Winforms.Helpers.Utilities;
@@ -195,11 +191,10 @@ PrintingHelper.PrintReport(
 
 ### VersionCheckerHelper
 
-Detects optimistic concurrency violations by comparing a row-version token recorded at load time against its current database value.
+Detects optimistic concurrency violations by comparing a row-version token captured at load time against its current database value.
 
-> Available on both `net8.0-windows` and `net472`.
-
-**Usage**
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net8.0-windows`, `net472`
 
 ```csharp
 using Jagwit.Winforms.Helpers.Utilities;
@@ -208,7 +203,7 @@ using Jagwit.Winforms.Helpers.Utilities;
 VersionCheckerHelper.ConcurrencyCheck(originalVersion, latestVersion);
 ```
 
-Pair this with a `RowVersion` / `Timestamp` column in your EF Core model to detect dirty-read conflicts before saving.
+Pair with a `RowVersion` / `Timestamp` column in your EF Core model to detect dirty-read conflicts before saving.
 
 ---
 

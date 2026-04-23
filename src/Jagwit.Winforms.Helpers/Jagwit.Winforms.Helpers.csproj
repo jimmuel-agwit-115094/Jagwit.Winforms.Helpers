@@ -10,8 +10,8 @@
     <Authors>Jimmuel Agwit</Authors>
     <Company>Nelnet</Company>
     <Copyright>Copyright © Jimmuel Agwit 2026</Copyright>
-    <Description>Reusable WinForms helper utilities including EF Core transaction helpers and UI message handlers.</Description>
-    <PackageTags>winforms;helpers;efcore;transactions;utilities</PackageTags>
+    <Description>Reusable WinForms utilities for .NET 8 and .NET Framework 4.7.2 — EF Core transactions, message dialogs, date formatting, null checking, concurrency checking, server clock, and RDLC printing.</Description>
+    <PackageTags>winforms;utilities;efcore;transactions;printing;rdlc;datetime;concurrency</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/jimmuel-agwit-115094/Jagwit.Winforms.Helpers</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jimmuel-agwit-115094/Jagwit.Winforms.Helpers</RepositoryUrl>
