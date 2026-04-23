@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Jagwit.Winforms.Helpers.Helpers
+namespace Jagwit.Winforms.Helpers.Utilities
 {
     /// <summary>
     /// Provides a helper method for configuring and rendering RDLC reports inside a <see cref="ReportViewer"/> control.

@@ -51,7 +51,7 @@
   <!-- PrintingHelper is excluded here: no official ReportViewer NuGet package exists for net8.0-windows -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-    <Compile Remove="Helpers\PrintingHelper.cs" />
+    <Compile Remove="Utilities\PrintingHelper.cs" />
   </ItemGroup>
 
   <!-- EF Core 3.1 + ReportViewer for .NET Framework 4.7.2 -->

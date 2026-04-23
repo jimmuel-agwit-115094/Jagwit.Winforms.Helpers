@@ -1,6 +1,6 @@
 using System;
 
-namespace Jagwit.Winforms.Helpers.Helpers
+namespace Jagwit.Winforms.Helpers.Utilities
 {
     /// <summary>
     /// Provides methods for validating that entity references loaded from the database are not null.

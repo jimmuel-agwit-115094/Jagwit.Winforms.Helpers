@@ -29,7 +29,7 @@ Windows Forms application required for both targets.
 
 ---
 
-## Helpers
+## Utilities
 
 ### DatabaseTransactionHelper
 
@@ -71,7 +71,7 @@ Static wrapper around `MessageBox.Show` for consistent dialog styling across you
 **Usage**
 
 ```csharp
-using Jagwit.Winforms.Helpers.Helpers;
+using Jagwit.Winforms.Helpers.Utilities;
 
 // Error dialog
 MessageHandler.ShowError("Something went wrong.");
@@ -101,7 +101,7 @@ Retrieves the current date and time from the database server via a raw ADO.NET c
 **Usage**
 
 ```csharp
-using Jagwit.Winforms.Helpers.Helpers;
+using Jagwit.Winforms.Helpers.Utilities;
 using System.Data.Common;
 
 // With EF Core (requires Microsoft.EntityFrameworkCore.Relational):
@@ -129,7 +129,7 @@ Static methods for formatting `DateTime` values into display-ready strings.
 **Usage**
 
 ```csharp
-using Jagwit.Winforms.Helpers.Helpers;
+using Jagwit.Winforms.Helpers.Utilities;
 
 // "April 23, 2026"
 string full = DateFormatHelper.FormatDate(DateTime.Now);
@@ -155,7 +155,7 @@ Throws a `NullReferenceException` with a descriptive message when a database ent
 **Usage**
 
 ```csharp
-using Jagwit.Winforms.Helpers.Helpers;
+using Jagwit.Winforms.Helpers.Utilities;
 
 var product = await _context.Products.FindAsync(id);
 NullCheckerHelper.NullCheck(product);
@@ -176,7 +176,7 @@ RDLC files are resolved from `<Application.StartupPath>\Printing\rdlc\<reportNam
 **Usage**
 
 ```csharp
-using Jagwit.Winforms.Helpers.Helpers;
+using Jagwit.Winforms.Helpers.Utilities;
 
 PrintingHelper.PrintReport(
     reportViewer: reportViewer1,
@@ -202,7 +202,7 @@ Detects optimistic concurrency violations by comparing a row-version token recor
 **Usage**
 
 ```csharp
-using Jagwit.Winforms.Helpers.Helpers;
+using Jagwit.Winforms.Helpers.Utilities;
 
 // Throws DBConcurrencyException if the record was modified since it was loaded
 VersionCheckerHelper.ConcurrencyCheck(originalVersion, latestVersion);

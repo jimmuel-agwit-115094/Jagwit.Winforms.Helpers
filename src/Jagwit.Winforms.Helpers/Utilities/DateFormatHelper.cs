@@ -1,6 +1,6 @@
 using System;
 
-namespace Jagwit.Winforms.Helpers.Helpers
+namespace Jagwit.Winforms.Helpers.Utilities
 {
     /// <summary>
     /// Provides static methods for formatting <see cref="DateTime"/> values into display-ready strings.

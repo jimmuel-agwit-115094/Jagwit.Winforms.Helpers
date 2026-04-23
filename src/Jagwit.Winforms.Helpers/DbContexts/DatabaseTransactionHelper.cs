@@ -1,4 +1,4 @@
-using Jagwit.Winforms.Helpers.Helpers;
+using Jagwit.Winforms.Helpers.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data;

@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace Jagwit.Winforms.Helpers.Helpers
+namespace Jagwit.Winforms.Helpers.Utilities
 {
     /// <summary>
     /// Provides static methods for displaying WinForms message dialogs.

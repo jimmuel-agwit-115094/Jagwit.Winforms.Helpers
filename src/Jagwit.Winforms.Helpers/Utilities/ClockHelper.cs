@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
 
-namespace Jagwit.Winforms.Helpers.Helpers
+namespace Jagwit.Winforms.Helpers.Utilities
 {
     /// <summary>
     /// Provides helpers for retrieving the current server date and time via an ADO.NET connection.

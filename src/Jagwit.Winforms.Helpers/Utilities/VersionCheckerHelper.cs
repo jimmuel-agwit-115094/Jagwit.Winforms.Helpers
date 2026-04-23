@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace Jagwit.Winforms.Helpers.Helpers
+namespace Jagwit.Winforms.Helpers.Utilities
 {
     /// <summary>
     /// Provides helpers for detecting optimistic concurrency violations using row-version tokens.
