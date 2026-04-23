@@ -1,6 +1,6 @@
 # Jagwit.Winforms.Helpers
 
-Reusable WinForms utilities for .NET 8 and .NET Framework 4.7.2 — EF Core transactions, message dialogs, date formatting, null checking, concurrency checking, server clock, and RDLC printing.
+Reusable WinForms utilities for .NET 8 and .NET Framework 4.7.2 — EF Core transactions, message dialogs, date formatting, null checking, concurrency checking, server clock, RDLC printing, DataGridView formatting, and TextBox input validation.
 
 ---
 
@@ -204,6 +204,135 @@ VersionCheckerHelper.ConcurrencyCheck(originalVersion, latestVersion);
 ```
 
 Pair with a `RowVersion` / `Timestamp` column in your EF Core model to detect dirty-read conflicts before saving.
+
+---
+
+### CurrencyTextboxHelper
+
+Hides the spin buttons on `NumericUpDown` controls tagged with `"IsNumeric"`, giving them a clean currency-input appearance.
+
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net8.0-windows`, `net472`
+
+```csharp
+using Jagwit.Winforms.Helpers.Utilities;
+
+// Call once after InitializeComponent — scans all child controls of the form/panel
+CurrencyTextboxHelper.ApplyNumericProperty(this);
+```
+
+Tag any `NumericUpDown` in the designer with `"IsNumeric"` to opt it in.
+
+---
+
+### TextBoxHelper
+
+Attaches formatting and validation event handlers to `TextBox` controls. All handlers are automatically cleaned up when the control is disposed.
+
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net8.0-windows`, `net472`
+
+| Method | Behaviour |
+|---|---|
+| `FormatDecimalTextbox` | Digits + one decimal point; formats as `N2` on blur |
+| `FormatPercentageTextbox` | Digits only; clamps to 0–100 on blur |
+| `FormatIntegerTextbox` | Digits only; clears zero on focus, restores on blur |
+| `FormatBarcode` | Digits and `/` only; clears invalid input on blur |
+| `FormatStringTextbox` | Letters only |
+| `HandleEmptyDecimalTextbox` | Sets blank field to `"0"` and selects all |
+| `ParseDecimalTextbox` | Parses a formatted decimal string respecting thousand separators |
+
+```csharp
+using Jagwit.Winforms.Helpers.Utilities;
+
+TextBoxHelper.FormatDecimalTextbox(txtPrice);
+TextBoxHelper.FormatIntegerTextbox(txtQuantity);
+TextBoxHelper.FormatPercentageTextbox(txtDiscount);
+
+decimal price = TextBoxHelper.ParseDecimalTextbox(txtPrice.Text);
+```
+
+---
+
+### DgFormatHelper
+
+Extension and static methods for formatting, styling, and querying `DataGridView` controls.
+
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net8.0-windows`, `net472`
+
+| Method | Behaviour |
+|---|---|
+| `AutoFormat()` | Extension — auto-aligns and formats columns by value type (DateTime, decimal, int, string, enum) |
+| `BasicGridFormat` | Applies fonts, locks header selection colour, disables sorting, sets row highlight |
+| `ShowOnlyField` | Hides all columns except those specified; converts headers from camelCase to spaced words |
+| `SetupLinkId` | Styles a numeric column as a blue underlined link with hover cursor |
+| `SetupLinkColumnsForString` | Same as above for string columns |
+| `SearchOnGrid` | Filters row visibility by a search `TextBox` (case-insensitive, any cell) |
+| `GetSelectedId` | Returns the integer ID from a clicked cell |
+| `GetSelectedIdOnSelectionChange` | Returns the integer ID from the currently selected row |
+| `GetSelectedRowId` | Returns an integer cell value from the first selected row |
+| `GetSelectedRowString` | Returns a string cell value from the first selected row |
+| `HandleEnterKey` | Suppresses the Enter key beep when the grid has rows |
+| `DisableColumnClick` | Makes a column non-sortable, read-only, and shows a `No` cursor on hover |
+| `SelectCurrentRow` | Selects the row that owns the current cell |
+| `DisableDatagrid` | Disables the grid and greys out all rows |
+| `ZeroCellValuesFormat` | Highlights zero-value cells in a column with red bold text |
+| `SetDataGridStyles` | Applies cached Segoe UI header font and Consolas cell font |
+
+```csharp
+using Jagwit.Winforms.Helpers.Utilities;
+
+DgFormatHelper.BasicGridFormat(dgvOrders);
+dgvOrders.AutoFormat();                          // extension method
+DgFormatHelper.ShowOnlyField(dgvOrders, "OrderId", "CustomerName", "Total");
+DgFormatHelper.SetupLinkId(dgvOrders, columnIndex: 0);
+DgFormatHelper.SearchOnGrid(dgvOrders, txtSearch);
+
+int id = DgFormatHelper.GetSelectedId(dgvOrders, e, "OrderId");
+```
+
+---
+
+### DgExtensions
+
+One-call setup that composes `BasicGridFormat`, `AutoFormat`, `SetupLinkId`, and `ShowOnlyField`, then toggles a "not found" label.
+
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net8.0-windows`, `net472`
+
+```csharp
+using Jagwit.Winforms.Helpers.Utilities;
+
+DgExtensions.ConfigureDataGrid(
+    dataGrid: dgvProducts,
+    setUpIdLink: true,
+    columnIndex: 0,
+    notFoundLabel: lblNoProducts,
+    fieldsToShow: "ProductId", "ProductName", "Price", "Stock"
+);
+```
+
+---
+
+### StatusIconHelper
+
+Displays a status message and an optional icon inside a `Panel` that contains a `PictureBox` and a `Label`. The caller supplies the icon image, so any image source (embedded resources, files, etc.) is supported.
+
+**Namespace:** `Jagwit.Winforms.Helpers.Utilities`  
+**Targets:** `net8.0-windows`, `net472`
+
+```csharp
+using Jagwit.Winforms.Helpers.Utilities;
+
+// With an icon
+StatusIconHelper.ShowStatus(pnlStatus, "Order saved successfully.", Properties.Resources.greenCheck);
+
+// Text only — hides the PictureBox
+StatusIconHelper.ShowStatus(pnlStatus, "Processing...");
+```
+
+The panel must contain exactly one `PictureBox` and one `Label`.
 
 ---
 
